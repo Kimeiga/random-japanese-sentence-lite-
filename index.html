@@ -12,10 +12,11 @@
 	<title>Random Japanese Sentence - Lite</title>
 
 	<script defer>
+		let japaneseText;
 		fetch("https://tatoeba.elnu.com/?from=jpn&orphans=no&sort=random&to=eng&trans_filter=limit&trans_to=eng&unapproved=no&limit=1&current=1").then(r => r.json())
 			.then(response => {
 				console.log(response);
-				let japaneseText = response.results[0].text;
+				japaneseText = response.results[0].text;
 				let japaneseRuby = response.results[0].transcriptions[0].html;
 
 				// filter the Japanese Text for full width period, and replace it with a half width period
@@ -32,21 +33,25 @@
 					translation.innerHTML = "No translation available";
 				}
 
-				window.speechSynthesis.onvoiceschanged = function () {
-					speakButton.addEventListener("click", () => {
-						if (japaneseText) {
-							speakSentence(japaneseText);
-						}
-					})
-				};
+
 			})
 
 		function speakSentence(sentence) {
 			let utterance = new SpeechSynthesisUtterance(sentence);
-			utterance.lang = "ja";
+			utterance.lang = "ja-JP";
 			utterance.rate = 0.8;
 			speechSynthesis.speak(utterance);
 		}
+
+		// Chrome loads voices asynchronously.
+		window.speechSynthesis.onvoiceschanged = function (e) {
+			speakButton.addEventListener("click", () => {
+				if (japaneseText) {
+					speakSentence(japaneseText);
+				}
+			})
+		};
+
 	</script>
 
 	<style>
