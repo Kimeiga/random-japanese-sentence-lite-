@@ -34,13 +34,19 @@
 
 				window.speechSynthesis.onvoiceschanged = function () {
 					speakButton.addEventListener("click", () => {
-						let utterance = new SpeechSynthesisUtterance(japaneseText);
-						utterance.lang = "ja-JP";
-						utterance.rate = 0.8;
-						speechSynthesis.speak(utterance);
+						if (japaneseText) {
+							speakSentence(japaneseText);
+						}
 					})
 				};
 			})
+
+		function speakSentence(sentence) {
+			let utterance = new SpeechSynthesisUtterance(sentence);
+			utterance.lang = "ja";
+			utterance.rate = 0.8;
+			speechSynthesis.speak(utterance);
+		}
 	</script>
 
 	<style>
