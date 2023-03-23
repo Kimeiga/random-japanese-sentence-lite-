@@ -12,6 +12,13 @@
 	<title>Random Japanese Sentence - Lite</title>
 
 	<script defer>
+		let voice;
+		window.speechSynthesis.onvoiceschanged = function (e) {
+			voice = window.speechSynthesis
+				.getVoices()
+				.filter((v) => v.lang.startsWith("ja"))[0];
+		};
+
 		// let japaneseText;
 		fetch("https://tatoeba.elnu.com/?from=jpn&orphans=no&sort=random&to=eng&trans_filter=limit&trans_to=eng&unapproved=no&limit=1&current=1").then(r => r.json())
 			.then(response => {
@@ -38,6 +45,7 @@
 						let utterance = new SpeechSynthesisUtterance(japaneseText);
 						utterance.lang = "ja";
 						utterance.rate = 0.8;
+						utterance.voice = voice;
 						speechSynthesis.speak(utterance);
 					}
 				})
